@@ -1,0 +1,27 @@
+[...@zeus Assign08]$ ./a8
+Enter 2-letter state code (0-letter to quit): ab
+AB is not a valid abbreviation
+Enter 2-letter state code (0-letter to quit): de
+DE = Delaware
+Enter 2-letter state code (0-letter to quit): fg
+FG is not a valid abbreviation
+Enter 2-letter state code (0-letter to quit): hi
+HI = Hawaii
+Enter 2-letter state code (0-letter to quit): mn
+MN = Minnesota
+Enter 2-letter state code (0-letter to quit): ok
+OK = Oklahoma
+Enter 2-letter state code (0-letter to quit): op
+OP is not a valid abbreviation
+Enter 2-letter state code (0-letter to quit): pq
+PQ is not a valid abbreviation
+Enter 2-letter state code (0-letter to quit): rs
+RS is not a valid abbreviation
+Enter 2-letter state code (0-letter to quit): tx
+TX = Texas
+Enter 2-letter state code (0-letter to quit): tu
+TU is not a valid abbreviation
+Enter 2-letter state code (0-letter to quit): ut
+UT = Utah
+Enter 2-letter state code (0-letter to quit): 
+[...@zeus Assign08]$ 

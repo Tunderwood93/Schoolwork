@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>view</OriginalElement>
+  <nodes>
+    <node x="407.0" y="156.0">view.EditingView</node>
+    <node x="298.0" y="156.0">view.MainView</node>
+    <node x="226.75" y="78.0">view.JFrameView</node>
+    <node x="247.75" y="0.0">view.View</node>
+    <node x="148.0" y="156.0">view.TopWindowView</node>
+    <node x="0.0" y="156.0">view.NewTopWindow</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="view.MainView" target="view.JFrameView">
+      <point x="0.0" y="-14.0" />
+      <point x="342.5" y="136.0" />
+      <point x="290.5" y="136.0" />
+      <point x="12.75" y="14.0" />
+    </edge>
+    <edge source="view.EditingView" target="view.JFrameView">
+      <point x="0.0" y="-14.0" />
+      <point x="458.5" y="126.0" />
+      <point x="316.0" y="126.0" />
+      <point x="38.25" y="14.0" />
+    </edge>
+    <edge source="view.NewTopWindow" target="view.JFrameView">
+      <point x="0.0" y="-14.0" />
+      <point x="64.0" y="126.0" />
+      <point x="239.5" y="126.0" />
+      <point x="-38.25" y="14.0" />
+    </edge>
+    <edge source="view.TopWindowView" target="view.JFrameView">
+      <point x="0.0" y="-14.0" />
+      <point x="213.0" y="136.0" />
+      <point x="265.0" y="136.0" />
+      <point x="-12.75" y="14.0" />
+    </edge>
+    <edge source="view.JFrameView" target="view.View">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="255.0" y="92.0" />
+  <SelectedNodes>
+    <node>view.NewTopWindow</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

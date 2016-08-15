@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>controller</OriginalElement>
+  <nodes>
+    <node x="198.0" y="0.0">controller.Controller</node>
+    <node x="171.5" y="78.0">controller.AbstractController</node>
+    <node x="163.0" y="156.0">controller.TopWindowController</node>
+    <node x="346.0" y="156.0">controller.MainController</node>
+    <node x="0.0" y="156.0">controller.BalanceController</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="controller.MainController" target="controller.AbstractController">
+      <point x="0.0" y="-14.0" />
+      <point x="407.0" y="131.0" />
+      <point x="293.16666666666663" y="131.0" />
+      <point x="48.66666666666663" y="14.0" />
+    </edge>
+    <edge source="controller.AbstractController" target="controller.Controller">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="controller.BalanceController" target="controller.AbstractController">
+      <point x="0.0" y="-14.0" />
+      <point x="71.5" y="131.0" />
+      <point x="195.83333333333334" y="131.0" />
+      <point x="-48.66666666666666" y="14.0" />
+    </edge>
+    <edge source="controller.TopWindowController" target="controller.AbstractController">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="234.0" y="92.0" />
+  <SelectedNodes>
+    <node>controller.BalanceController</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

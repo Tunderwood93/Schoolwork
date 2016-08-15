@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="166.0" y="297.0">com</node>
+    <node x="173.0" y="0.0">controller</node>
+    <node x="0.0" y="151.0">netscape</node>
+    <node x="0.0" y="224.0">oracle</node>
+    <node x="318.0" y="370.0">org</node>
+    <node x="160.0" y="370.0">sun</node>
+    <node x="194.0" y="151.0">META-INF</node>
+    <node x="0.0" y="443.0">jdk</node>
+    <node x="6.0" y="78.0">view</node>
+    <node x="0.0" y="370.0">java</node>
+    <node x="0.0" y="297.0">javax</node>
+    <node x="0.0" y="0.0">model</node>
+    <node x="174.0" y="224.0">javafx</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="view" target="model">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.9572301425661914" x="214.60531914893613" y="310.26382978723404" />
+  <SelectedNodes>
+    <node>com</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

@@ -1,0 +1,77 @@
+CS3339 - MIPS Disassembler
+  400000: j 400004
+  400004: sw $ra, -4($sp)
+  400008: sw $fp, -8($sp)
+  40000c: addiu $fp, $sp, -8
+  400010: addiu $sp, $fp, -12
+  400014: addiu $k1, $zero, 2
+  400018: sw $k1, 31168($gp)
+  40001c: lw $k1, 31168($gp)
+  400020: trap 3600001
+  400024: addiu $k1, $zero, 1
+  400028: sw $k1, -4($fp)
+  40002c: addiu $k1, $zero, 3
+  400030: sw $k1, -12($fp)
+  400034: lw $k1, -4($fp)
+  400038: addiu $k0, $zero, 400
+  40003c: slt $k1, $k1, $k0
+  400040: beq $k1, $zero, 40011c
+  400044: sw $zero, -8($fp)
+  400048: lw $k1, -8($fp)
+  40004c: lw $k0, -4($fp)
+  400050: slt $k1, $k1, $k0
+  400054: beq $k1, $zero, 4000d8
+  400058: lw $k1, -8($fp)
+  40005c: sll $k1, $k1, 2
+  400060: addu $k1, $k1, $gp
+  400064: lw $k0, -8($fp)
+  400068: sll $k0, $k0, 2
+  40006c: addu $k0, $k0, $gp
+  400070: lw $t9, 31168($k1)
+  400074: lw $k1, 31168($k0)
+  400078: mult $t9, $k1
+  40007c: mflo $t9
+  400080: lw $k1, -12($fp)
+  400084: slt $k1, $k1, $t9
+  400088: beq $k1, $zero, 40009c
+  40008c: lw $k1, -4($fp)
+  400090: addiu $k1, $k1, -1
+  400094: sw $k1, -8($fp)
+  400098: beq $zero, $zero, 4000c8
+  40009c: lw $k1, -8($fp)
+  4000a0: sll $k1, $k1, 2
+  4000a4: addu $k1, $k1, $gp
+  4000a8: lw $k0, -12($fp)
+  4000ac: lw $t9, 31168($k1)
+  4000b0: div $k0, $t9
+  4000b4: mfhi $k0
+  4000b8: addiu $k1, $zero, 0
+  4000bc: bne $k0, $k1, 4000c8
+  4000c0: lw $k1, -4($fp)
+  4000c4: sw $k1, -8($fp)
+  4000c8: lw $k1, -8($fp)
+  4000cc: addiu $k1, $k1, 1
+  4000d0: sw $k1, -8($fp)
+  4000d4: beq $zero, $zero, 400048
+  4000d8: lw $k1, -8($fp)
+  4000dc: lw $k0, -4($fp)
+  4000e0: bne $k1, $k0, 40010c
+  4000e4: lw $k1, -4($fp)
+  4000e8: sll $k1, $k1, 2
+  4000ec: addu $k1, $k1, $gp
+  4000f0: lw $k0, -12($fp)
+  4000f4: sw $k0, 31168($k1)
+  4000f8: lw $k1, -12($fp)
+  4000fc: trap 3600001
+  400100: lw $k1, -4($fp)
+  400104: addiu $k1, $k1, 1
+  400108: sw $k1, -4($fp)
+  40010c: lw $k1, -12($fp)
+  400110: addiu $k1, $k1, 2
+  400114: sw $k1, -12($fp)
+  400118: beq $zero, $zero, 400034
+  40011c: trap 0
+  400120: addiu $sp, $fp, 8
+  400124: lw $ra, 4($fp)
+  400128: lw $fp, 0($fp)
+  40012c: trap a

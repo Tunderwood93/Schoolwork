@@ -1,0 +1,10 @@
+a6a: Assign06TestAuto.o DPQueue.o
+	g++ Assign06TestAuto.o DPQueue.o -o a6a
+DPQueue.o: DPQueue.cpp DPQueue.h
+	g++ -Wall -ansi -pedantic -c DPQueue.cpp
+
+clean:
+	@rm -rf Assign06TestAuto.o DPQueue.o
+
+cleanall:
+	@rm -rf Assign06TestAuto.o DPQueue.o a6a

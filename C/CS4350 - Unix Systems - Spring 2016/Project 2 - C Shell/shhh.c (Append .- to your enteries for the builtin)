@@ -1,0 +1,438 @@
+/*
+   Hayley Buffkin, Sam Rios, Tanner Burns, Trevor Underwood
+   Project Two - Unix Shell
+   Date: April 24th, 2016. 
+*/
+
+/*
+   Need to Fix: 
+      1 - Double new line on return
+      2 - My life. 
+*/
+
+#include <fcntl.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+
+#define HIST_LEN 30
+char *hist[HIST_LEN];
+int num_hist = 0;
+
+void add_hist(char *);
+void print_hist();
+void clear_hist();
+void setup_signals();
+void mycat(); //builtin for cat
+void mycp(); //builtin for cp
+void myls(); //builtin for ls
+void mycd(); //builtin for cd
+void pwd(); //builtin for pwd
+
+int main()
+{
+   setup_signals();
+
+   char *path, *argv[20], buf[80], n, *p;
+   int m, status, inword, continu;
+   int left_fd[2], right_fd[2];
+   int pipes[10], num_pipes, x = 0, c_pid = 0, cmd_len = 0;
+   int bg, i_redirect, o_redirect, i_fd, o_fd;
+   char *i_file, *o_file, *cmd;
+   for(x = 0; x < HIST_LEN; x++)
+   { hist[x] = NULL; }
+
+   while(1)
+   {
+      inword = 0;
+      p = buf;
+      m = 0;
+      continu=0;
+      i_redirect = 0, o_redirect = 0;
+      i_file = NULL, o_file = NULL;
+      i_fd = -1, o_fd = -1;
+      bg = 0, cmd_len = 0, num_pipes = 0;
+      for(x = 0; x < 10; x++) { pipes[x] = 0; }
+
+      printf( "\nBaseShell> ");
+
+      while ( ( n = getchar() ) != '\n'  || continu )
+      {
+         if ( n ==  ' ' )
+         {
+            if ( inword )
+            {
+               inword = 0;
+               *p++ = 0;
+	         } 
+         }
+         else if ( n == '\n' ) 
+         {
+            continu = 0;
+         }
+         else if ( n == '\\' && !inword ) // Used for backslash escaping 
+         {
+            continu = 1;
+         }
+         else
+         {
+            if ( !inword )
+            {
+               inword = 1;
+               argv[m++] = p;
+               *p++ = n;
+            }
+            else {
+               *p++ = n;
+            }
+         }
+      }
+
+      *p++ = 0;
+      argv[m] = 0;
+
+      if(m == 0) 
+      {
+         continue;
+      }
+
+      if ( strcmp(argv[0],"quit") == 0 ) 
+      {
+         clear_hist();
+         exit (0);
+      }
+
+      for(x = 0; x < m; x++) 
+      {
+         cmd_len += strlen(argv[x]);
+      }
+      cmd_len += m;
+
+      cmd = malloc(cmd_len);
+      strcpy(cmd, argv[0]);
+      for(x = 1; x < m; x++)
+      {
+         strcat(cmd, " ");
+         strcat(cmd, argv[x]);
+      }
+
+      pipes[0] = 0;
+
+      if(strcmp(argv[0], "cd") == 0) //handle cd command
+      {
+         path = argv[1];
+         chdir(path);
+         add_hist(cmd);
+         continue;
+      }
+/*Pre-processing begins*/
+      for(x = 0; x < m; x++) {
+         if(strcmp(argv[x], "|") == 0) {
+            num_pipes++;
+            pipes[num_pipes] = x+1;   //save the locations after the pipes
+            argv[x] = 0;
+            x++;
+         }
+         else if(strcmp(argv[x], "<") == 0) {
+            i_redirect = 1;
+            i_file = argv[x+1];
+            argv[x] = 0;
+            x++;
+         }
+         else if(strcmp(argv[x], ">") == 0) {
+            o_redirect = 1;
+            o_file = argv[x+1];
+            argv[x] = 0;
+            x++;
+         }
+         else if(strcmp(argv[x], "&") == 0) {
+            bg = 1;
+            argv[x] = 0;
+         }
+      }
+/*Pre-processing ends*/
+      for(x = 0; x <= num_pipes; x++)
+      {
+         if(num_pipes > 0) { pipe(right_fd); }
+
+         c_pid = fork();
+
+         if(c_pid > 0) //parent process
+         {
+            if(x > 0)
+            {
+               close(left_fd[0]);
+               close(left_fd[1]);
+            }
+            left_fd[0] = right_fd[0];
+            left_fd[1] = right_fd[1];
+
+            if(bg == 0) {
+               waitpid(c_pid, &status, 0);
+            }
+         }
+         else if(c_pid == 0) //child process
+         {
+            if(x == 0 && i_redirect == 1) //first child with input redirection
+            {
+               //handle input redirection from file
+               i_fd = open(i_file, O_RDONLY);
+               if( dup2(i_fd, 0) < 0) {perror("dup2"); exit(-1);}
+               close(i_fd);
+            }
+            if(num_pipes > 0)
+            {
+               if(x == 0) //first child
+               {
+                  //redirect output to stdin of next child
+                  if( dup2(right_fd[1], 1) < 0) {perror("dup2"); exit(-1);}
+                  close(right_fd[1]);
+                  close(right_fd[0]);
+               }
+               else if(x == num_pipes) //last child
+               {
+                  //redirect output from previous child to stdin
+                  if( dup2(left_fd[0], 0) < 0) {perror("dup2"); exit(-1);}
+                  close(left_fd[0]);
+                  close(left_fd[1]);
+                  close(right_fd[0]);
+                  close(right_fd[1]);
+               }
+               else //middle child
+               {
+                  //redirect output from previous child to stdin
+                  if( dup2(left_fd[0], 0) < 0) {perror("dup2"); exit(-1);}
+                  close(left_fd[0]);
+                  close(left_fd[1]);
+
+                  //redirect output to next child
+                  if( dup2(right_fd[1], 1) < 0) {perror("dup2"); exit(-1);}
+                  close(right_fd[1]);
+                  close(right_fd[0]);
+               }
+            }
+            if(x == num_pipes && o_redirect == 1) //last child with output redirection
+            {
+               //handle output redirection to file
+               o_fd = open(o_file, O_WRONLY | O_CREAT | O_TRUNC, 00600);
+               if( dup2(o_fd, 1) < 0) {perror("dup2"); exit(-1);}
+               close(o_fd);
+            }
+            //exec to process or builtin commands
+            if(strcmp(argv[0], "history") == 0) //handle history command
+            {
+                print_hist();
+                exit(0);
+            }
+            else if(strcmp(argv[0], "myls") == 0) //handle myls
+            {
+               //Try to use aarons. 
+               /*
+                  myls -l a_file
+                  myls a_dir
+                  mycat $(myls)
+                  myls | mycat
+               */
+            }
+            else if(strcmp(argv[0], "mycat") == 0) //handle mycat
+            {
+               /*
+                  mycat a_file
+                  mycat < a_file
+                  mycat < a_file > b_file
+               */
+            }
+            else if(strcmp(argv[0], "mycp") == 0) //handle mycp
+            {
+               //Pulled from Suckless.org
+               /*
+                  mycp a_file b_file
+                  mycp -R a_dir b_dir
+               */ 
+            }
+            else if(strcmp(argv[0], "mycd") == 0) //handle mycd
+            {
+               // May actually be pretty easy. go checkout chdir() documentation
+               /*
+                  mycd .
+                  mycd ..
+                  mycd a_dir
+               */ 
+            }
+            else if(strcmp(argv[0], "pwd") == 0) //handle pwd
+            {
+               pwd();
+            }
+            else
+            {
+               execvp(argv[pipes[x]], argv + pipes[x]);
+               perror("execvp");
+               exit(-1);
+            }
+         }
+         else //fork error
+         {
+            perror("fork");
+            exit(-1);
+         }
+      }
+      add_hist(cmd);
+   }
+   return 0;
+}
+
+void add_hist(char *cmd)
+{
+   if(num_hist >= 30)
+   {
+      free(hist[0]);
+      int x = 0;
+      for(x = 0; x < HIST_LEN - 1; x++) {
+         hist[x] = hist[x+1];
+      }
+      hist[HIST_LEN-1] = cmd;
+   }
+   else
+   {
+      hist[num_hist] = cmd;
+      num_hist++;
+   }
+}
+
+void print_hist()
+{
+   int x = 0;
+   while(hist[x] != NULL && x < HIST_LEN)
+   {
+      printf("%s\n", hist[x]);
+      x++;
+   }
+}
+
+void clear_hist()
+{
+   int x = 0;
+   while(hist[x] != NULL && x < HIST_LEN)
+   {
+      free(hist[x]);
+      hist[x] = NULL;
+      x++;
+   }
+   num_hist = 0;
+}
+
+void setup_signals()
+{
+   struct sigaction action;
+
+   action.sa_handler = SIG_IGN;
+   sigemptyset(&(action.sa_mask));
+   action.sa_flags = SA_NOCLDWAIT;
+   sigaction(SIGCHLD, &action, NULL);
+}
+
+void pwd()
+{
+   char cwd[1024]; 
+   getcwd(cwd, sizeof(cwd));
+   printf("The current directory is: %s\n", cwd);
+}
+
+void mycd()
+{
+/*
+int cmd_cd(char* argv[]) 
+{
+  char *path = NULL;
+  if(argv[1] == NULL || strncmp("~", argv[1], 1) == 0){
+    struct passwd *pw = getpwuid(getuid());
+    if(argv[1] == NULL || strlen(argv[1]) == 1){
+      argv[1] = pw->pw_dir;
+    }
+    else{
+      path = malloc(strlen(pw->pw_dir) + strlen(arg[1]));
+      if (path == NULL){
+        printf("Memory allocation failed\n");
+        return -1;
+      }
+      strcpy(path, pw->pw_dir);
+      argv[1] = &argv[1][1];
+      strcat(path, argv[1]);
+      argv[1] = path;
+    }
+  }
+
+  if(chdir(argv[1])<0) {
+    printf("Not a valid path\n");
+    if (path != NULL) free(path);
+    return -1;
+  }
+  if (path != NULL) free(path);
+  return 0;
+}*/
+}
+
+void mycp()
+{
+/*#include <sys/stat.h>
+
+#include "fs.h"
+#include "util.h"
+
+static void
+usage(void)
+{
+   eprintf("usage: %s [-afpv] [-R [-H | -L | -P]] source ... dest\n", argv0);
+}
+
+int
+main(int argc, char *argv[])
+{
+   struct stat st;
+
+   ARGBEGIN {
+   case 'a':
+      cp_follow = 'P';
+      cp_aflag = cp_pflag = cp_rflag = 1;
+      break;
+   case 'f':
+      cp_fflag = 1;
+      break;
+   case 'p':
+      cp_pflag = 1;
+      break;
+   case 'r':
+   case 'R':
+      cp_rflag = 1;
+      break;
+   case 'v':
+      cp_vflag = 1;
+      break;
+   case 'H':
+   case 'L':
+   case 'P':
+      cp_follow = ARGC();
+      break;
+   default:
+      usage();
+   } ARGEND;
+
+   if (argc < 2)
+      usage();
+
+   if (argc > 2) {
+      if (stat(argv[argc - 1], &st) < 0)
+         eprintf("stat %s:", argv[argc - 1]);
+      if (!S_ISDIR(st.st_mode))
+         eprintf("%s: not a directory\n", argv[argc - 1]);
+   }
+   enmasse(argc, argv, cp);
+
+   return fshut(stdout, "<stdout>") || cp_status;
+}*/
+}

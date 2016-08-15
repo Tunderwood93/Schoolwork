@@ -1,0 +1,143 @@
+CS3339 - MIPS Disassembler
+  400000: j 400194
+  400004: sw $ra, -4($sp)
+  400008: sw $fp, -8($sp)
+  40000c: addiu $fp, $sp, -8
+  400010: addiu $sp, $fp, -12
+  400014: lw $k1, 12($fp)
+  400018: sw $k1, -4($fp)
+  40001c: lw $k1, 8($fp)
+  400020: sw $k1, -8($fp)
+  400024: lw $k1, 12($fp)
+  400028: lw $k0, 8($fp)
+  40002c: addu $k1, $k1, $k0
+  400030: sra $k1, $k1, 1
+  400034: sll $k1, $k1, 2
+  400038: addu $k1, $k1, $gp
+  40003c: lw $k0, 32368($k1)
+  400040: sw $k0, -12($fp)
+  400044: lw $k1, -4($fp)
+  400048: lw $k0, -8($fp)
+  40004c: beq $k1, $k0, 400058
+  400050: slt $k1, $k1, $k0
+  400054: beq $k1, $zero, 400128
+  400058: lw $k1, -4($fp)
+  40005c: sll $k1, $k1, 2
+  400060: addu $k1, $k1, $gp
+  400064: lw $k0, 32368($k1)
+  400068: lw $k1, -12($fp)
+  40006c: slt $k0, $k0, $k1
+  400070: beq $k0, $zero, 400084
+  400074: lw $k1, -4($fp)
+  400078: addiu $k1, $k1, 1
+  40007c: sw $k1, -4($fp)
+  400080: beq $zero, $zero, 400058
+  400084: lw $k1, -8($fp)
+  400088: sll $k1, $k1, 2
+  40008c: addu $k1, $k1, $gp
+  400090: lw $k0, -12($fp)
+  400094: lw $t9, 32368($k1)
+  400098: slt $k0, $k0, $t9
+  40009c: beq $k0, $zero, 4000b0
+  4000a0: lw $k1, -8($fp)
+  4000a4: addiu $k1, $k1, -1
+  4000a8: sw $k1, -8($fp)
+  4000ac: beq $zero, $zero, 400084
+  4000b0: lw $k1, -4($fp)
+  4000b4: lw $k0, -8($fp)
+  4000b8: beq $k1, $k0, 4000c4
+  4000bc: slt $k1, $k1, $k0
+  4000c0: beq $k1, $zero, 400124
+  4000c4: lw $k1, -4($fp)
+  4000c8: sll $k1, $k1, 2
+  4000cc: addu $k1, $k1, $gp
+  4000d0: lw $k0, 32368($k1)
+  4000d4: sw $k0, -12($fp)
+  4000d8: lw $k1, -4($fp)
+  4000dc: sll $k1, $k1, 2
+  4000e0: addu $k1, $k1, $gp
+  4000e4: lw $k0, -8($fp)
+  4000e8: sll $k0, $k0, 2
+  4000ec: addu $k0, $k0, $gp
+  4000f0: lw $t9, 32368($k0)
+  4000f4: sw $t9, 32368($k1)
+  4000f8: lw $k1, -8($fp)
+  4000fc: sll $k1, $k1, 2
+  400100: addu $k1, $k1, $gp
+  400104: lw $k0, -12($fp)
+  400108: sw $k0, 32368($k1)
+  40010c: lw $k1, -4($fp)
+  400110: addiu $k1, $k1, 1
+  400114: sw $k1, -4($fp)
+  400118: lw $k1, -8($fp)
+  40011c: addiu $k1, $k1, -1
+  400120: sw $k1, -8($fp)
+  400124: beq $zero, $zero, 400044
+  400128: lw $k1, 12($fp)
+  40012c: lw $k0, -8($fp)
+  400130: slt $k1, $k1, $k0
+  400134: beq $k1, $zero, 400154
+  400138: lw $k1, 12($fp)
+  40013c: sw $k1, -4($sp)
+  400140: addiu $sp, $sp, -4
+  400144: lw $k1, -8($fp)
+  400148: sw $k1, -4($sp)
+  40014c: addiu $sp, $sp, -4
+  400150: jal 400004
+  400154: lw $k1, -4($fp)
+  400158: lw $k0, 8($fp)
+  40015c: slt $k1, $k1, $k0
+  400160: beq $k1, $zero, 400180
+  400164: lw $k1, -4($fp)
+  400168: sw $k1, -4($sp)
+  40016c: addiu $sp, $sp, -4
+  400170: lw $k1, 8($fp)
+  400174: sw $k1, -4($sp)
+  400178: addiu $sp, $sp, -4
+  40017c: jal 400004
+  400180: addiu $sp, $fp, 8
+  400184: lw $ra, 4($fp)
+  400188: lw $fp, 0($fp)
+  40018c: addiu $sp, $sp, 8
+  400190: jr $ra
+  400194: sw $ra, -4($sp)
+  400198: sw $fp, -8($sp)
+  40019c: addiu $fp, $sp, -8
+  4001a0: addiu $sp, $fp, -4
+  4001a4: sw $zero, -4($fp)
+  4001a8: lw $k1, -4($fp)
+  4001ac: addiu $k0, $zero, 100
+  4001b0: slt $k1, $k1, $k0
+  4001b4: beq $k1, $zero, 4001e4
+  4001b8: lw $k1, -4($fp)
+  4001bc: sll $k1, $k1, 2
+  4001c0: addu $k1, $k1, $gp
+  4001c4: lw $k0, -4($fp)
+  4001c8: addiu $t9, $zero, 99
+  4001cc: subu $t9, $t9, $k0
+  4001d0: sw $t9, 32368($k1)
+  4001d4: lw $k1, -4($fp)
+  4001d8: addiu $k1, $k1, 1
+  4001dc: sw $k1, -4($fp)
+  4001e0: beq $zero, $zero, 4001a8
+  4001e4: lw $k1, 32368($gp)
+  4001e8: trap 3600001
+  4001ec: lw $k1, 32764($gp)
+  4001f0: trap 3600001
+  4001f4: trap 0
+  4001f8: addiu $k1, $zero, 0
+  4001fc: sw $k1, -4($sp)
+  400200: addiu $sp, $sp, -4
+  400204: addiu $k1, $zero, 99
+  400208: sw $k1, -4($sp)
+  40020c: addiu $sp, $sp, -4
+  400210: jal 400004
+  400214: lw $k1, 32368($gp)
+  400218: trap 3600001
+  40021c: lw $k1, 32764($gp)
+  400220: trap 3600001
+  400224: trap 0
+  400228: addiu $sp, $fp, 8
+  40022c: lw $ra, 4($fp)
+  400230: lw $fp, 0($fp)
+  400234: trap a
